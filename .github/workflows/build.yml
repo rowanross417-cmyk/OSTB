@@ -35,7 +35,8 @@ jobs:
 
     - name: Publish Binary
       run: |
-        dotnet publish OSTB/OSTB/OSTB/OSTB.csproj -c Release -r ${{ matrix.rid }} --self-contained true /p:PublishSingleFile=true /p:EnableCompressionInSingleFile=true -o ./publish
+        dotnet publish $(find . -name "*.csproj" -print -quit) -c Release -r ${{ matrix.rid }} --self-contained true /p:PublishSingleFile=true /p:EnableCompressionInSingleFile=true -o ./publish
+      shell: bash
 
     - name: Compress Release (Linux/macOS)
       if: runner.os != 'Windows'
