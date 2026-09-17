@@ -1,0 +1,7 @@
+/home/rr/Documents/OSTB/OSTB/OSTB/bin/Release/net10.0/win-x64/publish/OSTB.pdb
+/home/rr/Documents/OSTB/OSTB/OSTB/bin/Release/net10.0/win-x64/publish/av_libglesv2.dll
+/home/rr/Documents/OSTB/OSTB/OSTB/bin/Release/net10.0/win-x64/publish/libHarfBuzzSharp.dll
+/home/rr/Documents/OSTB/OSTB/OSTB/bin/Release/net10.0/win-x64/publish/libHarfBuzzSharp.pdb
+/home/rr/Documents/OSTB/OSTB/OSTB/bin/Release/net10.0/win-x64/publish/libSkiaSharp.dll
+/home/rr/Documents/OSTB/OSTB/OSTB/bin/Release/net10.0/win-x64/publish/libSkiaSharp.pdb
+/home/rr/Documents/OSTB/OSTB/OSTB/bin/Release/net10.0/win-x64/publish/OSTB.exe

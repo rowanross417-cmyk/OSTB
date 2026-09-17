@@ -1,0 +1,5 @@
+/home/rr/Documents/OSTB/OSTB/OSTB/bin/Release/net10.0/osx-x64/publish/OSTB.pdb
+/home/rr/Documents/OSTB/OSTB/OSTB/bin/Release/net10.0/osx-x64/publish/libAvaloniaNative.dylib
+/home/rr/Documents/OSTB/OSTB/OSTB/bin/Release/net10.0/osx-x64/publish/libHarfBuzzSharp.dylib
+/home/rr/Documents/OSTB/OSTB/OSTB/bin/Release/net10.0/osx-x64/publish/libSkiaSharp.dylib
+/home/rr/Documents/OSTB/OSTB/OSTB/bin/Release/net10.0/osx-x64/publish/OSTB

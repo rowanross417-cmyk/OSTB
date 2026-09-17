@@ -1,0 +1,560 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:OSTB.ViewModels"
+        xmlns:models="using:OSTB.Models"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
+        x:Class="OSTB.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        x:Name="mainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="OSTB"
+        Width="700" 
+        Height="700"
+        FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=14}"
+        FontFamily="{StaticResource TicketingFont}"
+        Background="#0d0a0b"
+        UseLayoutRounding="True">
+
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Window.Styles>
+        <!-- TabControl styling for retro taskbar theme -->
+        <Style Selector="TabControl">
+            <Setter Property="Background" Value="#0d0a0b" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="TabItem">
+            <Setter Property="FontFamily" Value="{StaticResource TicketingFont}" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#888888" />
+            <Setter Property="Margin" Value="2,0" />
+            <Setter Property="Padding" Value="12,6" />
+        </Style>
+        <Style Selector="TabItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Foreground" Value="#FFFFFF" />
+        </Style>
+        <Style Selector="TabItem:selected">
+            <Setter Property="Foreground" Value="#9B7EDE" />
+        </Style>
+
+        <!-- Custom Calendar Day Button Style -->
+        <Style Selector="Button.calDayBtn">
+            <Setter Property="Background" Value="#141013" />
+            <Setter Property="BorderBrush" Value="#2A242B" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="2" />
+            <Setter Property="Padding" Value="4" />
+        </Style>
+        <Style Selector="Button.calDayBtn:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#221A26" />
+            <Setter Property="BorderBrush" Value="#9B7EDE" />
+        </Style>
+
+        <Style Selector="Button.todayCell">
+            <Setter Property="Background" Value="#1b1520" />
+            <Setter Property="BorderBrush" Value="#9B7EDE" />
+            <Setter Property="BorderThickness" Value="1.2" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8" Color="#7A5CCB" OffsetX="0" OffsetY="0" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="Button.todayCell /template/ ContentPresenter">
+            <Setter Property="Background" Value="#1b1520" />
+            <Setter Property="BorderBrush" Value="#9B7EDE" />
+            <Setter Property="BorderThickness" Value="1.2" />
+        </Style>
+    </Window.Styles>
+
+    <Grid>
+        <Grid>
+        <TabControl TabStripPlacement="Bottom">
+            
+            <!-- TAB 1: Time Bank -->
+            <TabItem Header="TB">
+                <!-- Layered grid to support the burn modal over the main content -->
+                <Grid>
+                    <!-- Main Application Content -->
+                    <StackPanel>
+                        <TextBlock Text="--Open Source Time Bank--"
+                                   FontFamily="{StaticResource TicketingFont}"
+                                   TextOptions.TextRenderingMode="Alias"
+                                   Background="#9B7EDE"
+                                   FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=20}"
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   HorizontalAlignment="Stretch"
+                                   TextAlignment="Center"
+                                   Margin="0,0,0,3"
+                                   Padding="10,3,10,3"/>
+
+                        <Grid ShowGridLines="False"
+                              Margin="5,10,5,10"
+                              ColumnDefinitions="1*,Auto,1*,Auto,1*"
+                              RowDefinitions="Auto"
+                              HorizontalAlignment="Stretch">
+
+                            <!-- Left: Earned Time -->
+                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                                 <TextBlock Text="Earned Time"
+                                     FontFamily="{StaticResource TicketingFont}"
+                                     TextOptions.TextRenderingMode="Alias"
+                                     Foreground="White"
+                                           FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=16}"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,4"
+                                           Padding="10,3,10,3"/>
+
+                                <TextBlock Text="{Binding TimeDisplay}"
+                                           FontFamily="{StaticResource TicketingFont}"
+                                           TextOptions.TextRenderingMode="Alias"
+                                           Background="#F3E8EE"
+                                           Foreground="Black"
+                                           FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=13}"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,4"
+                                           Padding="10,3,10,3"/>
+
+                                <StackPanel Orientation="Horizontal" 
+                                            HorizontalAlignment="Center" 
+                                            Margin="0,3,0,0"
+                                            Spacing="6">
+
+                                            <Button Content="{Binding StartStopButtonText}"
+                                                TextOptions.TextRenderingMode="Alias"
+                                            Command="{Binding StartStopCommand}"
+                                            FontFamily="{StaticResource TicketingFont}"
+                                            HorizontalAlignment="Center"
+                                            Foreground="White"
+                                            Background="{Binding StartStopButtonDepressedColour}"
+                                            Margin="0,5,0,0"/>
+
+                                            <Button Content="{Binding ResetButtonText}"
+                                                Command="{Binding ResetCommand}"
+                                                FontFamily="{StaticResource TicketingFont}"
+                                                TextOptions.TextRenderingMode="Alias"
+                                            HorizontalAlignment="Center"
+                                            Foreground="White"
+                                            Background="{Binding ResetButtonColour}"
+                                            Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <TextBlock Text=">"
+                                       Grid.Column="1"
+                                       Grid.Row="0"
+                                       FontSize="60"
+                                       FontWeight="Light"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"/>
+
+                            <!-- Middle: Conversion -->
+                            <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                                <TextBlock Text="+Conversion+"
+                                           FontFamily="{StaticResource TicketingFont}"
+                                           TextOptions.TextRenderingMode="Alias"
+                                           Foreground="White"
+                                           FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=16}"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,4"
+                                           Padding="10,3,10,3"/>
+
+                                <Border Background="Transparent" 
+                                        BorderBrush="#9B7EDE" 
+                                        BorderThickness="3"
+                                        Padding="1"
+                                        CornerRadius="0"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,0,0,8">
+                                    <ProgressBar Value="{Binding ConversionProgress}" 
+                                                 Maximum="100" 
+                                                 MinWidth="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=100}"
+                                                 Height="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}"
+                                                 Foreground="#e63946"
+                                                 Background="#1a1a1a" />
+                                </Border>
+
+                                <Button Content="{Binding ConvertButtonText}"
+                                    Command="{Binding ToggleConversionCommand}"
+                                    FontFamily="{StaticResource TicketingFont}"
+                                    TextOptions.TextRenderingMode="Alias"
+                                        Foreground="White"
+                                        FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=13}"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,0,0,4"
+                                        Padding="12,3,12,3"/>
+
+                                <StackPanel Spacing="5" HorizontalAlignment="Center" Margin="0,10,0,0" MinWidth="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=140}">
+                                    <TextBlock Text="Duration (Min.):" 
+                                                   Foreground="White" 
+                                                   FontSize="12" 
+                                                   FontFamily="{StaticResource TicketingFont}"/>
+                                    <NumericUpDown Value="{Binding TargetConversionMinutes}" 
+                                                   Minimum="0.1" 
+                                                   Maximum="120" 
+                                                   Increment="0.5" 
+                                                   FormatString="0.0"
+                                                   FontFamily="{StaticResource TicketingFont}"/>
+
+                                    <TextBlock Text="Conversion Ratio:" 
+                                               Foreground="White" 
+                                               FontSize="12" 
+                                               FontFamily="{StaticResource TicketingFont}"/>
+                                    <NumericUpDown Value="{Binding ConversionRatio}" 
+                                                   Minimum="0.1" 
+                                                   Maximum="10.0" 
+                                                   Increment="0.1" 
+                                                   FormatString="0.0"
+                                                   FontFamily="{StaticResource TicketingFont}"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <TextBlock Text=">"
+                                       Grid.Column="3"
+                                       Grid.Row="0"
+                                       FontSize="60"
+                                       FontWeight="Light"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"/>
+
+                            <!-- Right: Banked Time -->
+                            <StackPanel Grid.Column="4" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                                 <TextBlock Text="Banked Time"
+                                     FontFamily="{StaticResource TicketingFont}"
+                                     TextOptions.TextRenderingMode="Alias"
+                                     Foreground="White"
+                                           FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=16}"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,4"
+                                           Padding="10,3,10,3"/>
+
+                                <TextBlock Text="{Binding BankedTimeDisplay}"
+                                           FontFamily="{StaticResource TicketingFont}"
+                                           TextOptions.TextRenderingMode="Alias"
+                                           Foreground="Black"
+                                           Background="#F3E8EE"
+                                           FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=13}"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,4"
+                                           Padding="10,3,10,3"/>
+
+                                <Button Content="{Binding ClaimButtonText}"
+                                    Command="{Binding ToggleClaimCommand}"
+                                    FontFamily="{StaticResource TicketingFont}"
+                                    TextOptions.TextRenderingMode="Alias"
+                                        Foreground="White"
+                                        Background="{Binding ClaimButtonColour}"
+                                        FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=13}"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,3,0,0"
+                                        Padding="12,3,12,3"/>
+
+                                <Button Content="Burn Time"
+                                        Command="{Binding OpenBurnModalCommand}"
+                                        FontFamily="{StaticResource TicketingFont}"
+                                        TextOptions.TextRenderingMode="Alias"
+                                        Foreground="White"
+                                        Background="#e63946"
+                                        FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=11}"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,6,0,0"
+                                        Padding="8,2,8,2"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Burn Modal Overlay -->
+                    <Grid IsVisible="{Binding IsBurnModalOpen}"
+                          Background="#80000000"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch">
+
+                        <Border Background="#1e1e24"
+                                BorderBrush="#9B7EDE"
+                                BorderThickness="1"
+                                CornerRadius="3"
+                                Padding="20"
+                                Width="320"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="Burn Banked Time"
+                                           FontFamily="{StaticResource TicketingFont}"
+                                           Foreground="White"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center" />
+
+                                <TextBlock Text="Remove accidental or excess time from banked balance. You cannot reclaim burned time."
+                                           FontFamily="{StaticResource TicketingFont}"
+                                           Foreground="#CCCCCC"
+                                           FontSize="12"
+                                           TextWrapping="Wrap"
+                                           HorizontalAlignment="Center" />
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
+                                    <TextBlock Text="Minutes:" 
+                                               FontFamily="{StaticResource TicketingFont}"
+                                               Foreground="White" 
+                                               VerticalAlignment="Center" />
+                                    <NumericUpDown Value="{Binding MinutesToBurnInput, Mode=TwoWay}"
+                                                   Minimum="1" 
+                                                   Maximum="1440" 
+                                                   Increment="5"
+                                                   FontFamily="{StaticResource TicketingFont}"
+                                                   Width="120" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,10,0,0">
+                                    <Button Content="{Binding ConfirmBurnButtonText}"
+                                            Command="{Binding ConfirmBurnTimeCommand}"
+                                            Background="{Binding ConfirmBurnButtonColour}"
+                                            Foreground="White" 
+                                            FontFamily="{StaticResource TicketingFont}" />
+                                    <Button Content="Cancel"
+                                            Command="{Binding CloseBurnModalCommand}"
+                                            FontFamily="{StaticResource TicketingFont}"
+                                            Background="#444444"
+                                            Foreground="White" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 2: Notepad -->
+            <TabItem Header="NP">
+                <Grid Margin="10">
+                   <TextBox Text="{Binding NoteText}"
+                            FontSize="{Binding NotepadFontSize}"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            PlaceholderText="What are you going to forget?..."
+                            Background="#141013"
+                            Foreground="White"
+                            BorderBrush="#9B7EDE"
+                            BorderThickness="1"
+                            FontFamily="{StaticResource TicketingFont}"
+                            Padding="12" />
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 3: Calendar -->
+            <TabItem Header="Cal">
+                <Grid>
+                    <!-- Calendar Main Area -->
+                    <Grid Margin="15" RowDefinitions="Auto, Auto, *">
+                        <!-- Header -->
+                        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,10">
+                            <Button Grid.Column="0"
+                                    Content="&lt;"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Command="{Binding PreviousMonthCommand}"
+                                    MinWidth="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=32}"
+                                    MinHeight="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=28}"
+                                    Background="#141013"
+                                    BorderBrush="#9B7EDE"
+                                    Foreground="White"
+                                    FontFamily="{StaticResource TicketingFont}"
+                                    FontWeight="Bold" />
+
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding CurrentMonthYearLabel}" 
+                                       FontFamily="{StaticResource TicketingFont}"
+                                       FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=18}"
+                                       FontWeight="Bold" 
+                                       Foreground="#9B7EDE"
+                                       HorizontalAlignment="Center" 
+                                       TextAlignment="Center" />
+
+                            <Button Grid.Column="2"
+                                    Content="&gt;"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Command="{Binding NextMonthCommand}"
+                                    MinWidth="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=32}"
+                                    MinHeight="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=28}"
+                                    Background="#141013"
+                                    BorderBrush="#9B7EDE"
+                                    Foreground="White"
+                                    FontFamily="{StaticResource TicketingFont}"
+                                    FontWeight="Bold" />
+                        </Grid>
+
+                        <!-- Day of Week Headers -->
+                        <UniformGrid Grid.Row="1" Columns="7" Margin="0,0,0,5" HorizontalAlignment="Stretch">
+                            <TextBlock Text="SUN" FontFamily="{StaticResource TicketingFont}" Foreground="#888888" HorizontalAlignment="Center" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=10}" />
+                            <TextBlock Text="MON" FontFamily="{StaticResource TicketingFont}" Foreground="#888888" HorizontalAlignment="Center" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=10}" />
+                            <TextBlock Text="TUE" FontFamily="{StaticResource TicketingFont}" Foreground="#888888" HorizontalAlignment="Center" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=10}" />
+                            <TextBlock Text="WED" FontFamily="{StaticResource TicketingFont}" Foreground="#888888" HorizontalAlignment="Center" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=10}" />
+                            <TextBlock Text="THU" FontFamily="{StaticResource TicketingFont}" Foreground="#888888" HorizontalAlignment="Center" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=10}" />
+                            <TextBlock Text="FRI" FontFamily="{StaticResource TicketingFont}" Foreground="#888888" HorizontalAlignment="Center" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=10}" />
+                            <TextBlock Text="SAT" FontFamily="{StaticResource TicketingFont}" Foreground="#888888" HorizontalAlignment="Center" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=10}" />
+                        </UniformGrid>
+
+                        <!-- Calendar Grid -->
+                        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled">
+                            <ItemsControl ItemsSource="{Binding CalendarDays}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="7" HorizontalAlignment="Stretch" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="models:CalendarDayModel">
+                                        <Button Classes="calDayBtn"
+                                                Classes.todayCell="{Binding IsToday}"
+                                                Command="{Binding $parent[ItemsControl].DataContext.OpenDayModalCommand}"
+                                                CommandParameter="{Binding}"
+                                                Margin="1"
+                                                MinHeight="{Binding #mainWindow.DataContext.AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=40}"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch"
+                                                Opacity="{Binding CellOpacity}"
+                                                IsHitTestVisible="{Binding IsCurrentMonth}">
+                                            <Button.Styles>
+                                                <Style Selector="Button">
+                                                    <Setter Property="BorderBrush" Value="#2A242B" />
+                                                    <Setter Property="BorderThickness" Value="1" />
+                                                </Style>
+                                            </Button.Styles>
+
+                                            <Grid RowDefinitions="Auto, *" Margin="2">
+                                                <TextBlock Text="{Binding DayNumber}" 
+                                                           FontFamily="{StaticResource TicketingFont}"
+                                                           FontWeight="Bold" 
+                                                           Foreground="White"
+                                                           FontSize="{Binding #mainWindow.DataContext.AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}"
+                                                           Margin="0,0,0,2" />
+                                                 
+                                                <TextBlock Grid.Row="1" 
+                                                           Text="{Binding NotesPreview}" 
+                                                           FontFamily="{StaticResource TicketingFont}"
+                                                           TextWrapping="Wrap"
+                                                           TextTrimming="CharacterEllipsis" 
+                                                           MaxLines="2" 
+                                                           FontSize="{Binding #mainWindow.DataContext.AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=8}"
+                                                           Foreground="#9B7EDE" 
+                                                           Margin="0,1,0,0" />
+                                            </Grid>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+
+                    <!-- Calendar Event Popup Modal Overlay -->
+                    <Grid IsVisible="{Binding IsCalendarModalOpen}"
+                          Background="#80000000"
+                          HorizontalAlignment="Stretch" 
+                          VerticalAlignment="Stretch">
+                        
+                        <Border Background="#1e1e24" 
+                                BorderBrush="#9B7EDE"
+                                BorderThickness="1"
+                                CornerRadius="4" 
+                                Padding="16" 
+                                Width="340" 
+                                Height="300"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center">
+                            <Grid RowDefinitions="Auto, *, Auto">
+                                <TextBlock Text="{Binding SelectedDateLabel}" 
+                                           FontFamily="{StaticResource TicketingFont}"
+                                           FontSize="18" 
+                                           FontWeight="Bold" 
+                                           Foreground="White"
+                                           HorizontalAlignment="Center" 
+                                           Margin="0,0,0,10" />
+
+                                <TextBox Grid.Row="1" 
+                                         Text="{Binding SelectedDayNoteText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                         PlaceholderText="Type events or reminders here..." 
+                                         AcceptsReturn="True" 
+                                         TextWrapping="Wrap" 
+                                         Background="#141013"
+                                         Foreground="White"
+                                         BorderBrush="#9B7EDE"
+                                         BorderThickness="1"
+                                         FontFamily="{StaticResource TicketingFont}"
+                                         FontSize="{Binding #mainWindow.DataContext.AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}"
+                                         Padding="8"
+                                         Margin="0,0,0,10" />
+
+                                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                                <Button Content="Cancel" 
+                                        Command="{Binding CloseCalendarModalCommand}" 
+                                        FontFamily="{StaticResource TicketingFont}"
+                                        FontSize="{Binding #mainWindow.DataContext.AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}"
+                                        Background="#444444"
+                                        Foreground="White" />
+                                    <Button Content="Save" 
+                                        Command="{Binding SaveCalendarNoteCommand}" 
+                                        FontFamily="{StaticResource TicketingFont}"
+                                        FontSize="{Binding #mainWindow.DataContext.AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}"
+                                        Background="#9B7EDE"
+                                        Foreground="White" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 4: Settings -->
+            <TabItem Header="Sett.">
+                <StackPanel Margin="15" Spacing="12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <TextBlock Text="-- Display Settings --" 
+                               FontFamily="{StaticResource TicketingFont}"
+                               Foreground="White" 
+                               FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=20}"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+
+                    <StackPanel Margin="0,12,0,0" HorizontalAlignment="Center" Spacing="6">
+                        <CheckBox Content="Always On Top" IsChecked="{Binding IsTopmost, Mode=TwoWay}" FontFamily="{StaticResource TicketingFont}" FontSize="12" />
+                        <CheckBox Content="Fullscreen" IsChecked="{Binding IsFullscreen, Mode=TwoWay}" FontFamily="{StaticResource TicketingFont}" FontSize="12" />
+                        <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center" Margin="0,4,0,0">
+                            <Button Content="Topmost" Command="{Binding ToggleTopmostCommand}" FontFamily="{StaticResource TicketingFont}" />
+                            <Button Content="Fullscreen" Command="{Binding ToggleFullscreenCommand}" FontFamily="{StaticResource TicketingFont}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                <StackPanel Margin="0,12,0,0" HorizontalAlignment="Center" Spacing="10">
+                    <TextBlock Text="UI Scale" FontFamily="{StaticResource TicketingFont}" Foreground="#CCCCCC" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}" />
+                    <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                        <Button Content="-" Command="{Binding DecreaseScaleCommand}" MinWidth="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=32}" FontFamily="{StaticResource TicketingFont}" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}" />
+                        <TextBlock Text="{Binding AppScale, StringFormat={}{0:0.0}x}" FontFamily="{StaticResource TicketingFont}" Foreground="#9B7EDE" MinWidth="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=60}" TextAlignment="Center" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}" />
+                        <Button Content="+" Command="{Binding IncreaseScaleCommand}" MinWidth="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=32}" FontFamily="{StaticResource TicketingFont}" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}" />
+                        <Button Content="Reset" Command="{Binding ResetScaleCommand}" Margin="4,0,0,0" FontFamily="{StaticResource TicketingFont}" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}" />
+                    </StackPanel>
+
+                    <TextBlock Text="Notepad Font" FontFamily="{StaticResource TicketingFont}" Foreground="#CCCCCC" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}" />
+                    <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                        <Button Content="-" Command="{Binding DecreaseNotepadFontCommand}" MinWidth="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=32}" FontFamily="{StaticResource TicketingFont}" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}" />
+                        <TextBlock Text="{Binding NotepadFontSize, StringFormat={}{0:0} pt}" FontFamily="{StaticResource TicketingFont}" Foreground="#9B7EDE" MinWidth="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=60}" TextAlignment="Center" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}" />
+                        <Button Content="+" Command="{Binding IncreaseNotepadFontCommand}" MinWidth="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=32}" FontFamily="{StaticResource TicketingFont}" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}" />
+                        <Button Content="Reset" Command="{Binding ResetNotepadFontCommand}" Margin="4,0,0,0" FontFamily="{StaticResource TicketingFont}" FontSize="{Binding AppScale, Converter={StaticResource ScaleConverter}, ConverterParameter=12}" />
+                    </StackPanel>
+                </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+        </TabControl>
+            </Grid>
+
+    </Grid>
+</Window>

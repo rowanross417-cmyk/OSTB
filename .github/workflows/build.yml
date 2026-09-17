@@ -1,0 +1,51 @@
+name: Build Desktop Releases
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            rid: linux-x64
+            artifact_name: OSTB-linux-x64.tar.gz
+          - os: windows-latest
+            rid: win-x64
+            artifact_name: OSTB-win-x64.zip
+          - os: macos-latest
+            rid: osx-x64
+            artifact_name: OSTB-macOS-x64.zip
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Publish Binary
+      run: |
+        dotnet publish OSTB.csproj -c Release -r ${{ matrix.rid }} --self-contained true /p:PublishSingleFile=true -o ./publish
+
+    - name: Compress Release (Linux/macOS)
+      if: runner.os != 'Windows'
+      run: tar -czvf ${{ matrix.artifact_name }} -C ./publish .
+
+    - name: Compress Release (Windows)
+      if: runner.os == 'Windows'
+      run: Compress-Archive -Path ./publish/* -DestinationPath ${{ matrix.artifact_name }}
+
+    - name: Upload Artifacts to GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ${{ matrix.artifact_name }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
