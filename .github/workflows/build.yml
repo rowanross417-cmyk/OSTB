@@ -26,6 +26,10 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
@@ -38,7 +42,8 @@ jobs:
 
     - name: Publish Binary
       run: |
-        dotnet publish OSTB/OSTB/OSTB/OSTB.csproj -c Release -r ${{ matrix.rid }} --self-contained true "-p:PublishSingleFile=true" "-p:EnableCompressionInSingleFile=true" -o ./publish
+        PROJECT_FILE=$(find . -name "*.csproj" -print -quit)
+        dotnet publish "$PROJECT_FILE" -c Release -r ${{ matrix.rid }} --self-contained true /p:PublishSingleFile=true /p:EnableCompressionInSingleFile=true -o ./publish
 
     - name: Compress Release (Linux/macOS)
       if: runner.os != 'Windows'
