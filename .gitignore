@@ -1,0 +1,13 @@
+cat << 'EOF' > .gitignore
+
+bin/
+obj/
+publish/
+
+
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+EOF
