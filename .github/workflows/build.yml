@@ -51,6 +51,7 @@ jobs:
 
     - name: Compress Release (Windows)
       if: runner.os == 'Windows'
+      shell: powershell
       run: Compress-Archive -Path ./publish/* -DestinationPath ${{ matrix.artifact_name }}
 
     - name: Upload Artifacts to GitHub Release
